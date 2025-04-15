@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>QUEST ENVIOS <S class="A S"></S></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rubik', sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.7);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 40px 20px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+      color: #fff;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.95);
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      flex-grow: 1;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #004080;
+    }
+
+    p.description {
+      font-size: 15px;
+      color: #444;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 30px;
+      padding: 14px;
+      background: linear-gradient(to right, #0066cc, #003366);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #004d99, #002244);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      padding: 20px;
+      color: #ccc;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <header>
+      <h1>Quest Transportadora Nacional de Colombia</h1>
+    </header>
+
+    <div class="container">
+      <h2>Rastrea tu paquete</h2>
+      <p class="description">Completa el siguiente formulario para conocer el estado de tu envío.</p>
+      <form id="paqueteForm">
+        <label>Nombre completo del receptor:
+          <input type="text" name="nombre" required>
+        </label>
+        <label>Número de cédula del receptor:
+          <input type="text" name="cedula" required pattern="\d+">
+        </label>
+        <label>Horario disponible para recibir:
+          <select name="horario" required>
+            <option value="">Selecciona un horario</option>
+            <option value="mañana">Mañana (8am - 12pm)</option>
+            <option value="tarde">Tarde (12pm - 4pm)</option>
+            <option value="noche">Noche (4pm - 8pm)</option>
+          </select>
+        </label>
+        <button type="submit">Consultar Envío</button>
+      </form>
+    </div>
+
+    <div class="footer">
+      Transportadora Nacional © 2025 - Servicio confiable a nivel nacional.
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('paqueteForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = {
+        nombre: e.target.nombre.value.trim(),
+        cedula: e.target.cedula.value.trim(),
+        horario: e.target.horario.value
+      };
+
+      try {
+        const res = await fetch('http://localhost:3000/api/paquetes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+        alert(data.message || 'Formulario enviado con éxito');
+        e.target.reset();
+      } catch (error) {
+        alert('Hubo un error al enviar el formulario. Intenta nuevamente.');
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
